@@ -1,0 +1,430 @@
+
+$black: #000;
+$grey1: #231f20;
+$grey2: #414042;
+$grey3: #adb2a8;
+$grey4: #efefed;
+$grey5: #f7f7f6;
+$grey6: #68715f;
+$grey7: #90978a;
+$grey8: #e1e3df;
+$teal : #329898;
+$base-font-size: 12px;
+
+@mixin font-size($sizeValue: $base-font-size, $line: $sizeValue * 1.6) {
+  font-size: ($sizeValue) + px;
+  line-height: ($line) + px;
+  font-size: ($sizeValue / 18) + rem;
+  line-height: ($line / 18) + rem;
+}
+
+@mixin importfont($font-family, $font-filename, $font-weight : normal, $font-style :normal, $font-stretch : normal) {
+  @font-face {
+    font-family: '#{$font-family}';
+    src: url('#{$font-filename}.eot');
+    src: url('#{$font-filename}.woff') format('woff'),
+    url('#{$font-filename}.ttf') format('truetype');
+    font-weight: $font-weight;
+    font-style: $font-style;
+    font-stretch: $font-stretch;
+  }
+}
+
+$baseFont: "proxima-nova",sans-serif;
+$titleFont: "grad",serif;
+
+
+/* Base Styles
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+/* NOTE
+html is set to 62.5% so that all the REM measurements throughout Skeleton
+are based on 10px sizing. So basically 1.5rem = 15px :) */
+
+body {
+  font-size: 1em; /* currently ems cause chrome bug misinterpreting rems on body element */
+  line-height: 1.6;
+  font-family: $baseFont, "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  text-rendering: optimizeLegibility;
+  webkit-font-smoothing: antialiased;
+  color: #050505; }
+
+/*! Typebase.less v0.1.0 | MIT License */
+
+// Typesetting variables. Edit these!
+$baseFontSize:18; // in pixels. This would result in 22px on desktop
+$baseLineHeight:1.5; // how large the line height is as a multiple of font size
+$leading:$baseLineHeight * 1rem;
+// Rate of growth for headings
+// I actually like this to be slightly smaller then the leading. Makes for tight headings.
+$scale:1.414;
+
+/* Setup */
+
+html {
+    /* Change default typefaces here */
+    font-family: $baseFont;
+    font-size: $baseFontSize / 16 * 100%;
+    // Make everything look a little nicer in webkit
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: auto;
+    -moz-text-size-adjust: auto;
+    -ms-text-size-adjust: auto;
+    -o-text-size-adjust: auto;
+    text-size-adjust: auto;
+}
+/* Copy & Lists */
+
+p {
+    line-height: $leading;
+    margin-top: $leading * 0.2;
+    margin-bottom: 0;
+    &.title {
+      font-weight: 700;
+    }
+}
+ul,
+ol {
+    margin-top: $leading;
+    margin-bottom: $leading;
+    li {
+        line-height: $leading;
+    }
+    ul,
+    ol {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
+blockquote {
+    line-height: $leading;
+    margin-top: $leading;
+    margin-bottom: $leading;
+}
+/* Headings */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    /* Change heading typefaces here */
+    font-family: $titleFont;
+    margin-top: $leading;
+    margin-bottom: 0;
+    line-height: $leading;
+    font-style: normal;
+    font-weight: 700;
+}
+h1 {
+    font-size: 3.4 * $scale * 1rem;
+    line-height: 3.4 * $leading;
+    // margin-top: 2 * $leading;
+}
+h2 {
+    font-size: 2.3 * $scale * 1rem;
+    line-height: 2.3 * $leading;
+    // margin-top: 2 * $leading;
+}
+h3 {
+    font-size: 1 * $scale * 1rem;
+    margin-top: 2 * $leading;
+}
+h4 {
+    font-size: $scale / 1.2 * 1rem;
+}
+h5 {
+    font-size: $scale / 1.4 * 1rem;
+}
+h6 {
+    font-size: $scale / 1.8 * 1rem;
+}
+/* Tables */
+
+table {
+    margin-top: $leading;
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+td,
+th {
+    padding: 10px;
+    line-height: $baseLineHeight * $baseFontSize - 0px;
+}
+td:first-child {
+  font-family: $baseFont;
+}
+/* Code blocks */
+
+code {
+    // Forces text to constrain to the line-height. Not ideal, but works.
+    vertical-align: bottom;
+}
+/* Leading paragraph text */
+
+.lead {
+    font-size: $scale * 1rem;
+}
+/* Hug a the block above you */
+
+.hug {
+    margin-top: 0;
+}
+
+
+strong {
+  font-family: $baseFont;
+}
+
+/* Typography
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+
+  // ******************************************
+  // Headers
+  // ******************************************
+  // h1,h2,h3,h4,h5,h6 {
+  //   font-family: $nimbusSemi;
+  //   color: $grey1;
+  //   margin: 1.15rem 0;
+  // }
+
+  // h1 {
+  //   @include font-size(90, 90);
+  //   margin-bottom: 18px;
+  // }
+
+  // h2 {
+  //   @include font-size(60, 60);
+  //   margin-bottom: 18px;
+  //   margin-top: 1.3em;
+  // }
+
+  // h3 {
+  //   @include font-size(55,60);
+  //   font-size: 84px/84px;
+  //   margin-bottom: 15px;
+  //   margin-top: 1.3em;
+  // }
+
+  // h4 {
+  //   // font-size: 70px/70px;
+  //   @include font-size(55,60);
+  //   margin-bottom: 15px;
+  // }
+
+  // h5 {
+  //   // font-size: 55px/60px;
+  //   @include font-size(45,48);
+  //   margin-bottom: 15px;
+  // }
+
+  // h6 {
+  //   // font-size: 45px/48px;
+  //   @include font-size(45,48);
+  //   margin-bottom: 12px;
+  // }
+
+  // p {
+  //   @include font-size(20,30);
+  //   font-family: $nimbus;
+  //   color: $grey2;
+  //   margin-bottom: 8px;
+  //   strong {
+  //     font-family: $nimbusSemi;
+  //   }
+  // }
+
+
+/* Links
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+a {
+  color: $teal;
+  text-decoration: none;
+  -webkit-transition: all ease 0.2s;
+  -moz-transition: all ease 0.2s;
+  -o-transition: all ease 0.2s;
+  transition: all ease 0.2s;
+  &:hover {
+    color: lighten($teal, 15%);
+  }
+}
+
+
+
+.button, a.button {
+  font-family: $baseFont;
+  font-size: 1.333rem;
+  line-height: 2.667rem;
+  color: #fff;
+  display: inline-block;
+  background-color: $teal;
+  text-transform: lowercase;
+  padding: 5px 21px;
+  margin-right: 25px;
+  border: none;
+  -webkit-transition: all ease 0.2s;
+  -moz-transition: all ease 0.2s;
+  -o-transition: all ease 0.2s;
+  transition: all ease 0.2s;
+  &:hover {
+    background-color: lighten($teal, 15%);
+  }
+}
+
+a.redBtn {
+  @extend .button;
+  background-color: $teal;
+  line-height: 2em;
+}
+
+/* Forms
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea,
+select {
+  height: 38px;
+  padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */
+  background-color: #fff;
+  border: 1px solid #D1D1D1;
+  border-radius: 4px;
+  box-shadow: none;
+  box-sizing: border-box; }
+/* Removes awkward default styles on some inputs for iOS */
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none; }
+textarea {
+  min-height: 65px;
+  padding-top: 6px;
+  padding-bottom: 6px; }
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+  border: 1px solid #33C3F0;
+  outline: 0; }
+label,
+legend {
+  display: block;
+  margin-bottom: .5rem;
+  font-weight: 600; }
+fieldset {
+  padding: 0;
+  border-width: 0; }
+input[type="checkbox"],
+input[type="radio"] {
+  display: inline; }
+label > .label-body {
+  display: inline-block;
+  margin-left: .5rem;
+  font-weight: normal; }
+
+
+// /* Lists
+// –––––––––––––––––––––––––––––––––––––––––––––––––– */
+// ul {
+//   list-style: circle outside;
+//   margin-left: 2rem; }
+// ol {
+//   list-style: decimal outside;
+//   margin-left: 2rem; }
+// ol, ul {
+//   padding-left: 0;
+//   @include font-size(20,30);
+//   margin-top: 0; }
+// ul ul,
+// ul ol,
+// ol ol,
+// ol ul {
+//   margin: 1.5rem 0 1.5rem 3rem;}
+// li {
+//   margin-bottom: 1rem; }
+
+
+/* Code
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+code {
+  padding: .2rem .5rem;
+  font-size: 90%;
+  font-family: monospace;
+  white-space: nowrap;
+  background: #F1F1F1;
+  border: 1px solid #E1E1E1;
+  border-radius: 4px; }
+pre > code {
+  display: block;
+  padding: 1rem 1.5rem;
+  margin: 0 0 0 1rem;
+  white-space: pre; }
+
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+// /* Tables
+// –––––––––––––––––––––––––––––––––––––––––––––––––– */
+// th,
+// td {
+//   padding: 12px 15px;
+//   text-align: left;
+//   border-bottom: 1px solid #E1E1E1; }
+// th:first-child,
+// td:first-child {
+//   padding-left: 0; }
+// th:last-child,
+// td:last-child {
+//   padding-right: 0; }
+
+
+// /* Spacing
+// –––––––––––––––––––––––––––––––––––––––––––––––––– */
+// button,
+// .button {
+//   margin-bottom: 1rem; }
+// input,
+// textarea,
+// select,
+// fieldset {
+//   margin-bottom: 1.5rem; }
+// pre,
+// blockquote,
+// dl,
+// figure,
+// table,
+// p,
+// ul,
+// ol,
+// form {
+//   margin-bottom: 1.2rem; }
+
+// blockquote {
+//   color: #888;
+//   padding-left: 25px;
+//   border-left: 5px solid #eee;
+// }

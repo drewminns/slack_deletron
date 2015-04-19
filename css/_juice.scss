@@ -1,0 +1,755 @@
+// --------------------------------------------------------------------
+// Juice v1.0.0
+// --------------------------------------------------------------------
+
+
+
+
+// --------------------------------------------------------------------
+// Variable settings
+// --------------------------------------------------------------------
+
+// CSS cubic-bezier timing functions.
+// Credit: http://github.com/jaukia/easie
+// EASE IN
+$ease-in-quad:      cubic-bezier(0.550,  0.085, 0.680, 0.530);
+$ease-in-cubic:     cubic-bezier(0.550,  0.055, 0.675, 0.190);
+$ease-in-quart:     cubic-bezier(0.895,  0.030, 0.685, 0.220);
+$ease-in-quint:     cubic-bezier(0.755,  0.050, 0.855, 0.060);
+$ease-in-sine:      cubic-bezier(0.470,  0.000, 0.745, 0.715);
+$ease-in-expo:      cubic-bezier(0.950,  0.050, 0.795, 0.035);
+$ease-in-circ:      cubic-bezier(0.600,  0.040, 0.980, 0.335);
+$ease-in-back:      cubic-bezier(0.600, -0.280, 0.735, 0.045);
+// EASE OUT
+$ease-out-quad:     cubic-bezier(0.250,  0.460, 0.450, 0.940);
+$ease-out-cubic:    cubic-bezier(0.215,  0.610, 0.355, 1.000);
+$ease-out-quart:    cubic-bezier(0.165,  0.840, 0.440, 1.000);
+$ease-out-quint:    cubic-bezier(0.230,  1.000, 0.320, 1.000);
+$ease-out-sine:     cubic-bezier(0.390,  0.575, 0.565, 1.000);
+$ease-out-expo:     cubic-bezier(0.190,  1.000, 0.220, 1.000);
+$ease-out-circ:     cubic-bezier(0.075,  0.820, 0.165, 1.000);
+$ease-out-back:     cubic-bezier(0.175,  0.885, 0.320, 1.275);
+// EASE IN OUT
+$ease-in-out-quad:  cubic-bezier(0.455,  0.030, 0.515, 0.955);
+$ease-in-out-cubic: cubic-bezier(0.645,  0.045, 0.355, 1.000);
+$ease-in-out-quart: cubic-bezier(0.770,  0.000, 0.175, 1.000);
+$ease-in-out-quint: cubic-bezier(0.860,  0.000, 0.070, 1.000);
+$ease-in-out-sine:  cubic-bezier(0.445,  0.050, 0.550, 0.950);
+$ease-in-out-expo:  cubic-bezier(1.000,  0.000, 0.000, 1.000);
+$ease-in-out-circ:  cubic-bezier(0.785,  0.135, 0.150, 0.860);
+$ease-in-out-back:  cubic-bezier(0.680, -0.550, 0.265, 1.550);
+
+// Base px
+$base-px-default: 16px !default;
+$browser-prefixes: false !default;
+
+// Prefix mixin if needed
+// Credit: http://bourbon.io/docs/#prefixer
+@mixin juice-prefixer($property, $value, $prefixes) {
+	@each $prefix in $prefixes {
+		@if $prefix == webkit {
+			-webkit-#{$property}: #{$value};
+		}
+		@else if $prefix == moz {
+			-moz-#{$property}: #{$value};
+		}
+		@else if $prefix == ms {
+			-ms-#{$property}: #{$value};
+		}
+		@else if $prefix == o {
+			-o-#{$property}: #{$value};
+		}
+		@else if $prefix == spec {
+			#{$property}: #{$value};
+		}
+		@else  {
+			@warn "Unrecognized prefix: #{$prefix}";
+		}
+	}
+}
+
+// Strip the units from a value
+// ----------------------------
+@function strip-units($value) {
+	@return $value / ($value * 0 + 1);
+}
+
+// Calculate rems from a px value
+// ------------------------------
+@function rem-calc($px, $base-val: $base-px-default) {
+	@if not unitless($px) {
+		$px: strip-units($px);
+	}
+	@if not unitless($base-val) {
+		$base-val: strip-units($base-val);
+	}
+	@return ($px / $base-val) * 1rem;
+}
+
+// Calculate ems from a px value
+// ------------------------------
+@function em-calc($px, $base-val: $base-px-default) {
+	@if not unitless($px) {
+		$px: strip-units($px);
+	}
+	@if not unitless($base-val) {
+		$base-val: strip-units($base-val);
+	}
+	@return ($px / $base-val) * 1em;
+}
+
+// Breakpoints
+$onepx: em-calc(1) !default;
+$hdpi-ratio-default: 1.3 !default;
+$breakpoint-xlarge-default: em-calc(1920) !default;
+$breakpoint-large-default: em-calc(1440) !default;
+$breakpoint-medium-default: em-calc(1024) !default;
+$breakpoint-small-default: em-calc(640) !default;
+$breakpoint-xsmall-default: em-calc(480) !default;
+$breakpoint-xxsmall-default: em-calc(320) !default;
+// Show/Hide
+$show-display-default: block !default;
+// Border Radius
+$border-radius-default: 5px !default;
+// Placeholder Color
+$placeholder-color-default: #555555 !default;
+// Triangle
+$triangle-direction-default: right !default;
+$triangle-size-default: $base-px-default !default;
+$triangle-color-default: #222222 !default;
+$triangle-element-default: after !default;
+// Circle
+$circle-size-default: $base-px-default !default;
+$circle-color-default: inherit !default;
+$circle-border-width-default: null !default;
+$circle-border-color-default: #222222 !default;
+$circle-display-default: inline-block !default;
+// Square
+$square-size-default: $base-px-default !default;
+$square-color-default: black !default;
+$square-border-width-default: null !default;
+$square-border-color-default: grey !default;
+$square-element-default: before !default;
+// Position
+$position-default: null !default;
+// Tint/Shade
+$mix-percent-default: 15% !default;
+
+
+
+
+// --------------------------------------------------------------------
+// Mixins
+// --------------------------------------------------------------------
+
+// Breakpoints
+// Inspiration: http://www.sitepoint.com/managing-responsive-breakpoints-sass/
+// ---------------------------------------------------------------------------
+$breakpoints: (
+	"xxlarge":	"(min-width: #{$breakpoint-xlarge-default + $onepx})",
+	"xlarge-only":	"(min-width: #{$breakpoint-large-default + $onepx}) and (max-width: #{$breakpoint-xlarge-default})",
+	"xlarge-up":	"(min-width: #{$breakpoint-large-default + $onepx})",
+	"xlarge":	"(max-width: #{$breakpoint-xlarge-default})",
+	"large-only":	"(min-width: #{$breakpoint-medium-default + $onepx}) and (max-width: #{$breakpoint-large-default})",
+	"large-up":	"(min-width: #{$breakpoint-medium-default + $onepx})",
+	"large":	"(max-width: #{$breakpoint-large-default})",
+	"medium-only":	"(min-width: #{$breakpoint-small-default + $onepx}) and (max-width: #{$breakpoint-medium-default})",
+	"medium-up":	"(min-width: #{$breakpoint-small-default + $onepx})",
+	"medium":	"(max-width: #{$breakpoint-medium-default})",
+	"small-only":	"(min-width: #{$breakpoint-xsmall-default + $onepx}) and (max-width: #{$breakpoint-small-default})",
+	"small-up":	"(min-width: #{$breakpoint-xsmall-default + $onepx})",
+	"small":	"(max-width: #{$breakpoint-small-default})",
+	"xsmall-only":	"(min-width: #{$breakpoint-xxsmall-default + $onepx}) and (max-width: #{$breakpoint-xsmall-default})",
+	"xsmall-up":	"(min-width: #{$breakpoint-xxsmall-default + $onepx})",
+	"xsmall":	"(max-width: #{$breakpoint-xsmall-default})",
+	"xxsmall":	"(max-width: #{$breakpoint-xxsmall-default})",
+	"iphone3":	"(min-device-width: 320px) and (max-device-width: 480px) and (-webkit-device-pixel-ratio: 1)",
+	"iphone3-landscape":	"(min-device-width: 320px) and (max-device-width: 480px) and (-webkit-device-pixel-ratio: 1) and (orientation: landscape)",
+	"iphone3-portrait":	"(min-device-width: 320px) and (max-device-width: 480px) and (-webkit-device-pixel-ratio: 1) and (orientation: portrait)",
+	"iphone4":	"(min-device-width: 320px) and (max-device-width: 480px) and (-webkit-device-pixel-ratio: 2) and (device-aspect-ratio: 2/3)",
+	"iphone4-landscape":	"(min-device-width: 320px) and (max-device-width: 480px) and (-webkit-device-pixel-ratio: 2) and (device-aspect-ratio: 2/3) and (orientation: landscape)",
+	"iphone4-portrait":	"(min-device-width: 320px) and (max-device-width: 480px) and (-webkit-device-pixel-ratio: 2) and (device-aspect-ratio: 2/3) and (orientation: portrait)",
+	"iphone5":	"(min-device-width: 320px) and (max-device-width: 568px) and (-webkit-device-pixel-ratio: 2) and (device-aspect-ratio: 40/71)",
+	"iphone5-landscape":	"(min-device-width: 320px) and (max-device-width: 568px) and (-webkit-device-pixel-ratio: 2) and (device-aspect-ratio: 40/71) and (orientation: landscape)",
+	"iphone5-portrait":	"(min-device-width: 320px) and (max-device-width: 568px) and (-webkit-device-pixel-ratio: 2) and (device-aspect-ratio: 40/71) and (orientation: portrait)",
+	"iphone6":	"(min-device-width: 375px) and (max-device-width: 667px) and (-webkit-device-pixel-ratio: 2)",
+	"iphone6-landscape":	"(min-device-width: 375px) and (max-device-width: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)",
+	"iphone6-portrait":	"(min-device-width: 375px) and (max-device-width: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)",
+	"iphone6-plus":	"(min-device-width: 414px) and (max-device-width: 736px) and (-webkit-device-pixel-ratio: 3)",
+	"iphone6-plus-landscape":	"(min-device-width: 414px) and (max-device-width: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)",
+	"iphone6-plus-portrait":	"(min-device-width: 414px) and (max-device-width: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)",
+	"ipad":	"(min-device-width: 768px) and (max-device-width: 1024px)",
+	"ipad-landscape":	"(min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape)",
+	"ipad-portrait":	"(min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait)",
+	"ipad-retina":	"(min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-device-pixel-ratio: 2)",
+	"ipad-retina-landscape":	"(min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)",
+	"ipad-retina-portrait":	"(min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)",
+	"hdpi":	"(-webkit-min-device-pixel-ratio: $hdpi-ratio-default), only screen and (min--moz-device-pixel-ratio: $hdpi-ratio-default), only screen and (-moz-min-device-pixel-ratio: $hdpi-ratio-default),	only screen and (-o-min-device-pixel-ratio: #{$hdpi-ratio-default}/1), only screen and (min-resolution: #{round($hdpi-ratio-default*96)}dpi), only screen and (min-resolution: #{$hdpi-ratio-default}dppx)"
+);
+@mixin bp($break, $viewport1: null) {
+	// preset breakpoint
+	@if not $viewport1 {
+		@if map-has-key($breakpoints, $break) {
+			@media only screen and #{map-get($breakpoints, $break)} { @content; }
+		}
+		@else {
+			@warn "Couldn't find a breakpoint named #{$break}.";
+		}
+	}
+	@else {
+		// min breakpoint
+		@if $break == min {
+			@media screen and (min-width: $viewport1) { @content; }
+		}
+		// max breakpoint
+		@else if $break == max {
+			@media screen and (max-width: $viewport1) { @content; }
+		}
+		// min & max breakpoint
+		@else {
+			@media screen and (min-width: $break) and (max-width: $viewport1) { @content; }
+		}
+	}
+}
+
+// Show/Hide Element
+// -----------------
+@mixin show($breakpoint: null, $display: $show-display-default) {
+	@if $breakpoint {
+		display: none;
+		@include bp($breakpoint) {
+			display: $display;
+		}
+	} @else {
+		display: $display;
+	}
+}
+@mixin hide($breakpoint: null) {
+	@if $breakpoint {
+		@include bp($breakpoint) {
+			display: none !important;
+		}
+	} @else {
+		display: none !important;
+	}
+}
+
+
+// Single side border radius
+// -------------------------
+@mixin border-top-radius($radius: $border-radius-default) {
+	border-top-right-radius: $radius;
+	border-top-left-radius: $radius;
+}
+@mixin border-right-radius($radius: $border-radius-default) {
+	border-top-right-radius: $radius;
+	border-bottom-right-radius: $radius;
+}
+@mixin border-bottom-radius($radius: $border-radius-default) {
+	border-bottom-right-radius: $radius;
+	border-bottom-left-radius: $radius;
+}
+@mixin border-left-radius($radius: $border-radius-default) {
+	border-top-left-radius: $radius;
+	border-bottom-left-radius: $radius;
+}
+
+// Transforms
+// ----------
+@mixin transform-single($property, $value) {
+	@if $browser-prefixes {
+		@include juice-prefixer(transform, #{$property}unquote("(")#{$value}unquote(")"), webkit moz ms o spec);
+	}
+	@else {
+		transform: #{$property}unquote("(")#{$value}unquote(")");
+	}
+}
+@mixin rotate($deg) {
+	@include transform-single(rotate, $deg);
+}
+@mixin rotateX($deg) {
+	@include transform-single(rotateX, $deg);
+}
+@mixin rotateY($deg) {
+	@include transform-single(rotateY, $deg);
+}
+@mixin rotateZ($deg) {
+	@include transform-single(rotateZ, $deg);
+}
+@mixin rotate3d($x, $y, $z, $deg) {
+	$multi-var: $x, $y, $z, $deg;
+	@include transform-single(rotate3d, $multi-var);
+}
+@mixin scale($ratio) {
+	@include transform-single(scale, $ratio);
+}
+@mixin scaleX($ratio) {
+	@include transform-single(scaleX, $ratio);
+}
+@mixin scaleY($ratio) {
+	@include transform-single(scaleY, $ratio);
+}
+@mixin scaleZ($ratio) {
+	@include transform-single(scaleZ, $ratio);
+}
+@mixin scale3d($x, $y, $z) {
+	$multi-var: $x, $y, $z;
+	@include transform-single(scale3d, $multi-var);
+}
+@mixin skew($x, $y) {
+	$multi-var: $x, $y;
+	@include transform-single(skew, $multi-var);
+	backface-visibility: hidden;
+}
+@mixin skewX($deg) {
+	@include transform-single(skewX, $deg);
+	backface-visibility: hidden;
+}
+@mixin skewY($deg) {
+	@include transform-single(skewY, $deg);
+	backface-visibility: hidden;
+}
+@mixin translate($x, $y) {
+	$multi-var: $x, $y;
+	@include transform-single(translate, $multi-var);
+}
+@mixin translateX($x) {
+	@include transform-single(translateX, $x);
+}
+@mixin translateY($y) {
+	@include transform-single(translateY, $y);
+}
+@mixin translateZ($z) {
+	@include transform-single(translateZ, $z);
+}
+@mixin translate3d($x, $y, $z) {
+	$multi-var: $x, $y, $z;
+	@include transform-single(translate3d, $multi-var);
+}
+
+// Emboss effect
+// -------------
+@mixin box-emboss($opacity: 0.5, $opacity2: 0.5){
+	@if $browser-prefixes {
+		@include juice-prefixer(box-shadow, "rgba(white,$opacity) 0 1px 0, inset rgba(black,$opacity2) 0 1px 0", webkit spec);
+	}
+	@else {
+		box-shadow: rgba(white,$opacity) 0 1px 0, inset rgba(black,$opacity2) 0 1px 0;
+	}
+}
+
+// Letterpress effect
+// ------------------
+@mixin letterpress($opacity: 0.5){
+	text-shadow: rgba(white,$opacity) 0 1px 0;
+}
+
+// Placeholder text
+// ----------------
+@mixin placeholder-color($color: $placeholder-color-default) {
+	@if $browser-prefixes {
+		&::-webkit-input-placeholder {
+			color: $color;
+		}
+		&::-moz-placeholder {
+			color: $color;
+		}
+		&::-ms-input-placeholder {
+			color: $color;
+		}
+		&::placeholder {
+			color: $color;
+		}
+	}
+	@else {
+		&::placeholder {
+			color: $color;
+		}
+	}
+}
+
+// Sizing
+// ------
+@mixin size($width, $height: $width) {
+	width: $width;
+	height: $height;
+}
+
+// Normal & hover state
+// --------------------
+@mixin hoverer($property, $normal, $hovered) {
+	#{$property}: $normal;
+	&:hover {
+		#{$property}: $hovered;
+	}
+}
+
+// Add responsive styling for multiple breakpoints
+// -----------------------------------------------
+@mixin responsive($property, $base, $medium:false, $small:false) {
+	#{$property}: $base;
+	@if $medium {
+		@include bp(medium) {
+			#{$property}: $medium;
+		}
+	}
+	@if $small {
+		@include bp(small) {
+			#{$property}: $small;
+		}
+	}
+}
+
+// Create a triangle using borders
+// -------------------------------
+@mixin triangle($direction: $triangle-direction-default,
+								$size: $triangle-size-default,
+								$color: $triangle-color-default,
+								$center: false,
+								$element: $triangle-element-default) {
+	&:#{$element} {
+		@if not $center {
+			position: absolute;
+		}
+		content:'';
+		@include size(0);
+		-webkit-transform: rotate(360deg);
+		border-style: solid;
+		@if $direction == up {
+			border-width: 0 $size ($size*1.625) $size;
+			border-color: transparent transparent $color transparent;
+			@if $center {
+				@include absolute(null,null,100%,50%);
+				@if $browser-prefixes {
+					@include juice-prefixer(transform, translateX(-$size), webkit moz ms o spec);
+				}
+				@else {
+					transform: translateX(-$size);
+				}
+			}
+		}
+		@else if $direction == up-right {
+			border-width: 0 $size $size 0;
+			border-color: transparent $color transparent transparent;
+			@if $center {
+				@include absolute(0,0);
+			}
+		}
+		@else if $direction == right {
+			border-width: $size 0 $size ($size*1.625);
+			border-color: transparent transparent transparent $color;
+			@if $center {
+				@include absolute(50%,null,null,100%);
+				@if $browser-prefixes {
+					@include juice-prefixer(transform, translateY(-$size), webkit moz ms o spec);
+				}
+				@else {
+					transform: translateY(-$size);
+				}
+			}
+		}
+		@else if $direction == down-right {
+			border-width: 0 0 $size $size;
+			border-color: transparent transparent $color transparent;
+			@if $center {
+				@include absolute(null,0,0);
+			}
+		}
+		@else if $direction == down {
+			border-width: ($size*1.625) $size 0 $size;
+			border-color: $color transparent transparent transparent;
+			@if $center {
+				@include absolute(100%,null,null,50%);
+				@if $browser-prefixes {
+					@include juice-prefixer(transform, translateX(-$size), webkit moz ms o spec);
+				}
+				@else {
+					transform: translateX(-$size);
+				}
+			}
+		}
+		@else if $direction == down-left {
+			border-width: $size 0 0 $size;
+			border-color: transparent transparent transparent $color;
+			@if $center {
+				@include absolute(null,null,0,0);
+			}
+		}
+		@else if $direction == left {
+			border-width: $size ($size*1.625) $size 0;
+			border-color: transparent $color transparent transparent;
+			@if $center {
+				@include absolute(50%,100%);
+				@if $browser-prefixes {
+					@include juice-prefixer(transform, translateY(-$size), webkit moz ms o spec);
+				}
+				@else {
+					transform: translateY(-$size);
+				}
+			}
+		}
+		@else if $direction == up-left {
+			border-width: $size $size 0 0;
+			border-color: $color transparent transparent transparent;
+			@if $center {
+				@include absolute(0,null,null,0);
+			}
+		}
+		@else {
+			@warn "Available directions: up, up-right, right, down-right, down, down-left, left, up-left.";
+		}
+		@content;
+	}
+}
+
+// Create a circle, with an optional border
+// ----------------------------------------
+@mixin circle($size: $circle-size-default,
+						$color: $circle-color-default,
+						$border-width: $circle-border-width-default,
+						$border-color: $circle-border-color-default,
+						$display: $circle-display-default) {
+	display: $display;
+	border-radius: 50%;
+	@if $border-width {
+		@include size($size);
+		background-color: $color;
+		border: $border-width solid $border-color;
+	}
+	@else{
+		@if $color == inherit {
+			@include size(0);
+			border-width: $size/2;
+			border-style: solid;
+		}
+		@else {
+			@include size($size);
+			background-color: $color;
+		}
+	}
+}
+
+// Create a psuedo element square, with an optional border
+// -------------------------------------------------------
+@mixin square($size: $square-size-default,
+						$color: $square-color-default,
+						$border-width: $square-border-width-default,
+						$border-color: $square-border-color-default,
+						$element: $square-element-default) {
+	&:#{$element} {
+		content: '';
+		position: absolute;
+		@include size($size);
+		background: $color;
+		@if $border-width {
+			border: $border-width solid $border-color;
+		}
+	}
+}
+
+// Advanced positioning
+// --------------------
+@mixin position($type,
+								$top: $position-default,
+								$right: $position-default,
+								$bottom: $position-default,
+								$left: $position-default) {
+	position: $type;
+	$allowed_types: absolute relative fixed;
+	@if not index($allowed_types, $type) {
+		@warn "Unknown position: #{$type}.";
+	}
+	@each $data in top $top, right $right, bottom $bottom, left $left {
+		#{nth($data, 1)}: nth($data, 2);
+	}
+}
+@mixin absolute($top: $position-default, $right: $position-default, $bottom: $position-default, $left: $position-default) {
+	@include position(absolute, $top, $right, $bottom, $left);
+}
+@mixin relative($top: $position-default, $right: $position-default, $bottom: $position-default, $left: $position-default) {
+	@include position(relative, $top, $right, $bottom, $left);
+}
+@mixin fixed($top: $position-default, $right: $position-default, $bottom: $position-default, $left: $position-default) {
+	@include position(fixed, $top, $right, $bottom, $left);
+}
+
+// Easily set an element's "trbl" values
+// -------------------------------------
+@mixin trbl($top: $position-default,
+								$right: $position-default,
+								$bottom: $position-default,
+								$left: $position-default) {
+	@each $data in top $top, right $right, bottom $bottom, left $left {
+		#{nth($data, 1)}: nth($data, 2);
+	}
+}
+@mixin top-left {
+	@include trbl(0,null,null,0);
+}
+@mixin top-right {
+	@include trbl(0,0);
+}
+@mixin bottom-left {
+	@include trbl(null,null,0,0);
+}
+@mixin bottom-right {
+	@include trbl(null,0,0,null);
+}
+
+// Preload Images
+// Credit: http://codepen.io/pixelass/details/vEKZRq
+// -------------------------------------------------
+@mixin image-preload($preload: run) {
+	@if not variable-exists(_preload-image-list) {
+		$_preload-image-list: ()!global;
+	}
+	@if not variable-exists(_preload-image-urls) {
+		$_preload-image-urls: ()!global;
+	}
+	@if not variable-exists(_preload-images-loaded) {
+		$_preload-images-loaded: false!global;
+	}
+	@if $preload == run and not $_preload-images-loaded {
+		$_preload-images-loaded: true!global;
+		html:after {
+			content: '';
+			display: none;
+			background-image: $_preload-image-urls;
+		}
+	} @else {
+		$_preload-image-list: join($preload, $_preload-image-list)!global;
+		$image-urls: ();
+		@if length($_preload-image-list) > 0 {
+			@for $i from 1 through length($_preload-image-list) {
+				$image-urls: join(url(#{nth($_preload-image-list,$i)}), $image-urls);
+			}
+			$result: ();
+			@each $item in $image-urls {
+				@if not index($result, $item) {
+						$result: append($result, $item, comma);
+				}
+			}
+			$_preload-image-urls: $result!global;
+		}
+	}
+}
+
+// --------------------------------------------------------------------
+// Helper Mixins
+// --------------------------------------------------------------------
+
+// Clearfix
+// --------
+@mixin clearfix {
+	*zoom: 1;
+	&:before,
+	&:after {
+		display: table;
+		content:'';
+		line-height: 0;
+	}
+	&:after {
+		clear: both;
+	}
+}
+
+// Hide text
+// ---------
+@mixin hide-text {
+	font: 0/0 a;
+	color: transparent;
+	text-shadow: none;
+}
+
+// Center an element vertically and horizontally
+// ---------------------------------------------
+@mixin centerer {
+	@include absolute(50%,null,null,50%);
+	@if $browser-prefixes {
+		@include juice-prefixer(transform, translate(-50%,-50%), webkit moz ms o spec);
+	}
+	@else {
+		transform: translate(-50%,-50%);
+	}
+}
+
+// Center an element vertically
+// ----------------------------
+@mixin vert-centerer {
+	@include relative(50%);
+	@if $browser-prefixes {
+		@include juice-prefixer(transform, translateY(-50%), webkit moz ms o spec);
+	}
+	@else {
+		transform: translateY(-50%);
+	}
+}
+
+// Cover everything
+// ----------------
+@mixin coverer {
+	@include absolute(0, null, null, 0);
+	@include size(100%);
+}
+
+// Center a block level element
+// ----------------------------
+@mixin center-block {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+// Clean an element
+// ----------------
+@mixin clean {
+	margin: 0;
+	padding: 0;
+}
+
+// ----------------------------------
+// Functions
+// ----------------------------------
+
+// Mix white with another color
+// ----------------------------
+@function tint($color, $percent: $mix-percent-default){
+	@return mix(white, $color, $percent);
+}
+ 
+// Mix black with another color
+// ----------------------------
+@function shade($color, $percent: $mix-percent-default){
+	@return mix(black, $color, $percent);
+}
+
+// Create a random color
+// ---------------------
+@function random-color($min: 0, $max: 255, $alpha: 1) {
+	@if $min < 0 {
+		$min: -1;
+	} @else {
+		$min: $min - 1;
+	}
+	@if $max > 255 {
+		$max: 256;
+	} @else {
+		$max: $max + 1;
+	}
+	$red: random($max) + $min;
+	$green: random($max) + $min;
+	$blue: random($max) + $min;
+	@return rgba($red, $green, $blue, $alpha);
+}
+
+// Reverse a string
+// Credit: https://coderwall.com/p/rhu_uw/sass-str-reverse-function
+// ----------------
+@function reverse($string) {
+	$reversed-string: '';
+	@for $i from 1 through str-length($string) {
+		$char: str-slice($string, $i, $i);
+		$reversed-string: "#{$char}#{$reversed-string}";
+	}
+	@return #{$reversed-string};
+}

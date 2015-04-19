@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Slack File Deletion</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="//use.typekit.net/ewr8lmm.js"></script>
+	<script>try{Typekit.load();}catch(e){}</script>
+	<link rel="stylesheet" href="css/main.min.css">
+</head>
+<body>
+
+		<div class="header">
+			<div class="headerBar"></div>
+			<div class="wrapper">
+				<div class="intro">
+					<h1>Too many files on Slack?</h1>
+					<p class="introDesc">Delete those GIFs and files that you thought were hilarious, but lost on everyone else. <br> <em>Whatever</em>, You don't have to explain your art.</p>
+				</div>
+				<div class="loggedIn">
+					<h1>Get rid of those Slack files!</h1>
+				</div>
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="wrapper">
+
+				<div class="loginWindow">
+					<button type="submit" class="login" value="slack" name="type">Login to Slack</button>
+				</div>
+
+				<div class="persona">
+					<p class="hello">
+						Hey <span class="userName"></span>! What's up? <br>Let's delete <span class="fileType"></span> files from slack.
+					</p>
+					<div class="selectForm">
+						<select name="" id="files">
+							<option value="all" data-value="all">All</option>
+							<option value="posts" data-value="post">Posts</option>
+							<option value="snippets" data-value="snippet">Snippets</option>
+							<option value="images" selected data-value="Image">Image Files</option>
+							<option value="gdocs" data-value="Google Doc">Google Docs</option>
+							<option value="zips" data-value="Zip Files">Zip Files</option>
+							<option value="pdfs" data-value="PDF">PDF's</option>
+						</select>
+					</div>
+					<button id="delete" class="deleteBtn">DELETE EM'</button>
+					<p class="count">Congrats, You deleted <span>0</span> files!</p>
+				</div>
+
+			</div>
+		</div>
+
+
+		<div class="whoMadeThis">
+			<p><a href="http://drewminns.com">drewminns</a> made this.</p>
+			<p><a href="http://github.com/drewminns">Improve this.</a> I made it in a weekend while I had headache.</p>
+		</div>
+		
+
+		
+
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="js/main.js"></script>
+	
+</body>
+</html>

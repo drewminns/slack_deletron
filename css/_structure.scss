@@ -1,0 +1,102 @@
+.wrapper {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.header {
+	text-align: center;
+	.headerBar {
+		width: 100%;
+		height: 20px;
+		margin-bottom: 100px;
+		background: linear-gradient(left, #38BA91 25%, #38BA91 25%,#6FCBDD 25%, #6FCBDD 50%, #EAA822 50%, #EAA822 75%, #E21565 75%, #E21565 100%);
+	}
+	h1 {
+		padding-bottom: 60px;
+		margin-bottom: 60px;
+		position: relative;
+		&:after {
+			position: absolute;
+			bottom: 0;
+			content: '';
+			bottom: 0;
+			left: calc(50% - 150px);
+			height: 2px; 
+			width: 300px;
+			background: #E21565;
+		}
+	}
+	.loggedIn {
+		display: none;
+		opacity: 0;
+	}
+}
+
+.container {
+	width: 100%;
+	text-align: center;
+	.loginWindow {
+		margin: 25px;
+		// display: none;
+		button.login {
+			padding: 20px 80px;
+			background: #439FE0;
+			color: white;
+			border: 0;
+			@include font-size(21);
+			font-weight: 400;
+			transition: all 0.3s;
+			outline: 0;
+			&:hover {
+				background: #6FCBDD;
+			}
+		}
+	}
+}
+
+
+.persona {
+	display: none;
+	opacity: 0;
+	.hello {
+		@include font-size(21);
+	}
+	.selectForm {
+		margin: 25px 0;
+		select {
+			width: 270px;
+			border-radius: 0;
+			text-align: center;
+		}
+	}
+	button.deleteBtn {
+		padding: 20px 80px;
+		background: #439FE0;
+		color: white;
+		border: 0;
+		@include font-size(21);
+		font-weight: 400;
+		transition: all 0.3s;
+		outline: 0;
+		&:hover {
+			background: #6FCBDD;
+		}
+	}
+	p.count {
+		display: none;
+		@include font-size(32);
+	}
+}
+
+.whoMadeThis {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	padding: 10px;
+	text-align: right;
+	p {
+		@include font-size(16);
+		margin: 0;
+	}
+}
+

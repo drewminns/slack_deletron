@@ -1,0 +1,59 @@
+/////////////////
+//   Deadset   //
+// Adapted from Semantic.gs // for SCSS: http://sass-lang.com/
+/////////////////
+
+// Defaults which you can freely override
+$column-width: 60px;
+$gutter-width: 120px;
+$columns: 12;
+
+// Utility function — you should never need to modify this
+@function gridsystem-width($columns:$columns) {
+	@return ($column-width * $columns) + ($gutter-width * $columns);
+}
+
+// Set $total-width to 100% for a fluid layout
+$total-width: 100%;
+
+@mixin clearfix() {
+	*zoom: 1;
+	&:before,
+	&:after {
+		display: table;
+		content:'';
+		line-height: 0;
+	}
+	&:after {
+		clear: both;
+	}
+}
+
+//////////
+// GRID //
+//////////
+
+body {
+	width: 100%;
+	@include clearfix();
+}
+
+@mixin row() {
+	display: block;
+	width: 100%;
+	margin: 0 auto;
+	@include clearfix();
+}
+@mixin column($x,$columns:$columns) {
+	display: inline-block;
+	float: left;
+	width: ($total-width/$columns) * $x;
+	padding-left: $total-width*(($gutter-width*.5)/gridsystem-width($columns));
+	padding-right: $total-width*(($gutter-width*.5)/gridsystem-width($columns));
+}
+@mixin push($offset:1) {
+	margin-left: ($total-width/$columns) * $offset;
+}
+@mixin pull($offset:1) {
+	margin-right: ($total-width/$columns) * $offset;
+}
