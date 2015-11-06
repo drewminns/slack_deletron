@@ -2,10 +2,8 @@ var slackApp = {},
 		authWindow;
 
 		// Create an app on api.slack.com and fill out your creds below
-		// slackApp.clientId = "2530777076.9091056678",
-		slackApp.clientId = "2530777076.4498986624",
-		// slackApp.clientSecret = "12fb1b7b9c0436d9ecd0e85fc2630618";
-		slackApp.clientSecret = "e921e90c2faa49747f4aebb91e68349b";
+		slackApp.clientId = "clientID",
+		slackApp.clientSecret = "clientSecret";
 		slackApp.id = [];
 		slackApp.count = 0;
 
