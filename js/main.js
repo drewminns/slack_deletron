@@ -2,8 +2,10 @@ var slackApp = {},
 		authWindow;
 
 		// Create an app on api.slack.com and fill out your creds below
-		slackApp.clientId = "<client_id>",
-		slackApp.clientSecret = "<client_secret>";
+		// slackApp.clientId = "2530777076.9091056678",
+		slackApp.clientId = "2530777076.4498986624",
+		// slackApp.clientSecret = "12fb1b7b9c0436d9ecd0e85fc2630618";
+		slackApp.clientSecret = "e921e90c2faa49747f4aebb91e68349b";
 		slackApp.id = [];
 		slackApp.count = 0;
 
@@ -24,7 +26,6 @@ slackApp.auth = function() {
 		}
 	});
 };
-
 slackApp.parse = function() {
 	function getParameterByName(name) {
 	    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -103,6 +104,7 @@ slackApp.displayPersona = function() {
 
 slackApp.deleteClick = function() {
 	$('button.deleteBtn').on('click', function() {
+		slackApp.count = 0;
 		slackApp.fileType = $(this).val();
 		slackApp.getFiles();
 		// alert('hello');
@@ -119,8 +121,13 @@ slackApp.getFiles = function() {
 			types: slackApp.fileType
 		},
 		success: function(data) {
-			// console.log(data.files);
-			slackApp.listFiles(data.files);
+			console.log(data.files.length);
+			if (!data.files.length <= 0) {
+				slackApp.listFiles(data.files);
+			} else {
+				$('.count').show();
+				$('.count').text('No files to delete! Yay!');
+			}
 		}
 	});
 };
@@ -129,6 +136,7 @@ slackApp.listFiles = function(files) {
 	for (var i = 0; i < files.length; i++ ) {
 		slackApp.id.push(files[i].id);
 	}
+	// console.log(slackApp.id);
 	// console.log(files);
 	slackApp.deleteFiles(slackApp.id);
 };
@@ -144,13 +152,17 @@ slackApp.deleteFiles = function(id) {
 				file: id[i]
 			},
 			success: function(data) {
-				slackApp.count++;
 				console.log(data);
-				$('.count').show();
-				$('.count span').text(slackApp.count);
+				if (data.ok != false) {
+					slackApp.count++;
+					$('.count').show();
+					$('.count span').text(slackApp.count);
+				} else {
+					$('.count span').text('You got em all!');
+				}
 			},
 			error: function(data) {
-				console.log('fuck');
+				console.log('broken');
 			}
 		});
 	}

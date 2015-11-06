@@ -15,7 +15,10 @@
     "gulp-jshint": "^1.9.2",
     "gulp-minify-css": "^0.4.6",
     "gulp-rename": "^1.2.0",
-    "gulp-sass": "^1.3.3",
+    "gulp-sass": "*",
     "jshint-stylish": "^1.0.0"
+  },
+  "dependencies": {
+    "gulp-sass": "^2.1.0"
   }
 }
