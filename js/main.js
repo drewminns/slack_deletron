@@ -4,6 +4,7 @@ var slackApp = {},
 		// Create an app on api.slack.com and fill out your creds below
 		slackApp.clientId = "clientID",
 		slackApp.clientSecret = "clientSecret";
+		slackApp.scope = "files:write:user files:read";
 		slackApp.id = [];
 		slackApp.count = 0;
 
@@ -11,7 +12,7 @@ slackApp.auth = function() {
 	var $login = $('.login');
 	$login.on('click', function(e) {
 		e.preventDefault();
-		authWindow = window.open('https://slack.com/oauth/authorize?client_id=' + slackApp.clientId, '', 'left=20,top=20,width=800,height=700,toolbar=0,resizable=1');
+		authWindow = window.open('https://slack.com/oauth/authorize?client_id=' + slackApp.clientId+ '&scope=' + slackApp.scope, '', 'left=20,top=20,width=800,height=700,toolbar=0,resizable=1');
 
 		var timer = setInterval(checkChildWindow, 500);
 
